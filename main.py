@@ -38,7 +38,7 @@ def entry_scan(event):
     s = ent.get()
     s = s.split()
     upd_list()
-    _set_AND()
+    _set_XOR()
 
 
 def upd_list():
@@ -78,7 +78,8 @@ def _set_CD():
         if i == 2 or i == 1:
             c.create_line(_rec_list[1][0], _rec_list[0][1] + k, _rec_list[1][0]+15, _rec_list[0][1] + k, width=2)
             c.create_text(_rec_list[1][0] - 10, _rec_list[0][1] + k, text=i, justify=CENTER, font="Verdana 14")
-
+        _port_list[i][0] = _rec_list[0][0] - 15
+        _port_list[i][1] = _rec_list[0][1] + k
         i -= 1
         k+=25
 
@@ -131,7 +132,7 @@ def _set_DC():
         c.create_text(_rec_list[1][0] - 10, _rec_list[0][1]+k,text=i,justify=CENTER, font="Verdana 14")
         if i == 2 or i == 1:
             c.create_line(_rec_list[0][0] - 15, _rec_list[0][1] + k, _rec_list[0][0], _rec_list[0][1] + k, width=2)
-            c.create_text(_rec_list[0][0] + 13, _rec_list[0][1] + k, text="x"+str(i), justify=CENTER, font="Verdana 14")
+            c.create_text(_rec_list[0][0] + 13, _rec_list[0][1] + k, text=i, justify=CENTER, font="Verdana 14")
         i -= 1
         k+=25
 
@@ -182,7 +183,35 @@ def _set_startPoint():
 
 def _set_OR():
     if var.get() == 0:  # coder
-        pass
+        _set_CD()
+        i = 3
+        k = 28
+        while (i >= 0):
+            if i == 0 or i == 1:
+                _point_list[0][0] = _rec_list[0][0] - 60
+                _point_list[0][1] = _rec_list[0][1] + k
+                c.create_line(_point_list[0][0],_point_list[0][1],_rec_list[0][0],_rec_list[0][1]+k,width=2)
+            if i == 3:
+                c.create_polygon(_rec_list[0][0] - 10, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[0][0] - 20, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 2:
+                c.create_text(_port_list[2][0] + 5, _port_list[2][1] - 10, text=1, justify=CENTER, font="Verdana 8")
+                c.create_polygon(_rec_list[1][0] + 10, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[1][0] + 20, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 1:
+                _point_list[0][0] = _rec_list[1][0]
+                _point_list[0][1] = _port_list[1][1]
+                _set_NOT()
+
+            i -= 1
+            k += 25
+
     if var.get() == 1:  # decoder
         _set_DC()
         i = 3
@@ -223,7 +252,118 @@ def _set_OR():
 
 def _set_XOR():
     if var.get() == 0:  # coder
-        pass
+        _rec_list[0][0] +=30
+        _rec_list[1][0] +=30
+        _set_CD()
+        i = 3
+        k = 28
+        while (i >= 0):
+            if i == 0 or i == 1:
+                _point_list[0][0] = _rec_list[0][0] - 60
+                _point_list[0][1] = _rec_list[0][1] + k
+                _set_NOT()
+            if i == 3:
+                c.create_polygon(_rec_list[0][0] - 10, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[0][0] - 20, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 2:
+                c.create_text(_port_list[2][0] + 5, _port_list[2][1] - 10, text=1, justify=CENTER, font="Verdana 8")
+                c.create_polygon(_rec_list[1][0] + 10, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[1][0] + 20, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 1:
+                _point_list[0][0] = _rec_list[0][0] - 70
+                _point_list[0][1] = _rec_list[0][1] + k
+                c.create_line(_point_list[0][0], _point_list[0][1], _point_list[0][0] + 10, _point_list[0][1], width=2)
+                c.create_line(_point_list[0][0], _point_list[0][1], _point_list[0][0], _point_list[0][1] + k, width=2)
+
+            if i == 0:
+                _point_list[0][0] = _rec_list[0][0] - 60
+                _point_list[0][1] = _rec_list[0][1] + k
+                c.create_line(_point_list[0][0], _point_list[0][1], _point_list[0][0], _point_list[0][1] + k - 40, width=2)
+
+            i -= 1
+            k += 25
+
+        tmp = _rec_list[1][1] - _rec_list[0][1]
+        _rec_list[0][1] = _rec_list[1][1] + 10
+        _rec_list[1][1] =_rec_list[0][1] + tmp
+        _set_CD()
+        _set_CD()
+        i = 3
+        k = 28
+        while (i >= 0):
+            if i == 0 or i == 1:
+                _point_list[0][0] = _rec_list[0][0] - 60
+                _point_list[0][1] = _rec_list[0][1] + k
+                c.create_line(_point_list[0][0],_point_list[0][1],_rec_list[0][0],_rec_list[0][1]+k,width=2)
+            if i == 3:
+                c.create_polygon(_rec_list[0][0] - 10, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[0][0] - 20, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 2:
+                c.create_text(_port_list[2][0] + 5, _port_list[2][1] - 10, text=1, justify=CENTER, font="Verdana 8")
+                c.create_polygon(_rec_list[1][0] + 10, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[1][0] + 20, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 0:
+                _point_list[0][0] = _rec_list[0][0] - 70
+                _point_list[0][1] = _rec_list[0][1] + k
+                c.create_line(_point_list[0][0], _point_list[0][1]-25, _point_list[0][0], _point_list[0][1] - k, width=2)
+                c.create_line(_point_list[0][0], _point_list[0][1] - k-14, _point_list[0][0] - 10, _point_list[0][1] - k-14, width=2) #port 2
+            if i == 1:
+                c.create_line(_point_list[0][0], _point_list[0][1], _point_list[0][0] - 10, _point_list[0][1], width=2)
+                c.create_line(_point_list[0][0], _point_list[0][1]+25, _point_list[0][0], _point_list[0][1] - k, width=2)
+                c.create_line(_point_list[0][0], _point_list[0][1] - k+14, _point_list[0][0] - 20, _point_list[0][1] - k+14, width=2) #port1
+
+
+            i -= 1
+            k += 25
+
+        _rec_list[0][0] = _rec_list[1][0] + 90
+        _rec_list[1][0] = _rec_list[0][0] + 70
+        tmp = _rec_list[1][1] - _rec_list[0][1]
+        _rec_list[0][1] = _rec_list[1][1] - 200
+        _rec_list[1][1] = _rec_list[0][1] + tmp
+        _set_CD()
+        _set_CD()
+        i = 3
+        k = 28
+        while (i >= 0):
+            if i == 0 or i == 1:
+                _point_list[0][0] = _rec_list[0][0] - 60
+                _point_list[0][1] = _rec_list[0][1] + k
+                c.create_line(_point_list[0][0],_point_list[0][1],_rec_list[0][0],_rec_list[0][1]+k,width=2)
+            if i == 3:
+                c.create_polygon(_rec_list[0][0] - 10, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[0][0] - 20, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 2:
+                c.create_text(_port_list[2][0] + 5, _port_list[2][1] - 10, text=1, justify=CENTER, font="Verdana 8")
+                c.create_polygon(_rec_list[1][0] + 10, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[1][0] + 20, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 1:
+                c.create_line(_point_list[0][0], _point_list[0][1], _point_list[0][0],_point_list[0][1] - 90, width=2)
+                c.create_line(_point_list[0][0], _point_list[0][1] - 90, _point_list[0][0] - 15, _point_list[0][1] - 90, width=2)
+            if i == 0:
+                c.create_line(_point_list[0][0], _point_list[0][1], _point_list[0][0], _point_list[0][1] + 35, width=2)
+                c.create_line(_point_list[0][0], _point_list[0][1] + 35, _point_list[0][0] - 15, _point_list[0][1] + 35, width=2)
+            i -= 1
+            k += 25
+
     if var.get() == 1:  # decoder
         _set_DC()
         i = 3
@@ -292,7 +432,29 @@ def _set_XOR():
 def _set_AND():
 
     if var.get() == 0:#coder
-        pass
+        _set_CD()
+        i = 3
+        k = 28
+        while (i>=0):
+            if i == 0 or i == 1:
+                _point_list[0][0] = _rec_list[0][0] - 60
+                _point_list[0][1] = _rec_list[0][1] + k
+                _set_NOT()
+            if i == 3:
+                c.create_polygon(_rec_list[0][0] - 10, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[0][0] - 20, _rec_list[0][1] + k,
+                                 _rec_list[0][0] - 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            if i == 2:
+                c.create_text(_port_list[2][0] + 5, _port_list[2][1] - 10, text=1, justify=CENTER, font="Verdana 8")
+                c.create_polygon(_rec_list[1][0] + 10, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k - 5,
+                                 _rec_list[1][0] + 20, _rec_list[0][1] + k,
+                                 _rec_list[1][0] + 15, _rec_list[0][1] + k + 5,
+                                 fill='black', outline='black')
+            i -=1
+            k+=25
     if var.get() == 1:#decoder
         _set_DC()
         i = 3
@@ -338,12 +500,11 @@ def _set_AND():
 but.bind('<Button-1>',  entry_scan)
 #_set_DC()
 #_set_NOT()
-_set_CD()
+#_set_CD()
 #_set_MX()
 #_set_OR()
 #_set_AND()
 #_set_XOR()
-
 root.mainloop()
 
 
